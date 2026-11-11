@@ -1,0 +1,15 @@
+@model LoginViewModel
+@{ ViewData["Title"] = "Sign in"; }
+<section class="login-wrap">
+    <div class="login-brand"><div class="brand-mark large">A</div><p class="eyebrow">APEXPOST LOGISTICS</p><h1>One counter.<br />Every service.</h1><p class="muted">Secure access for branch retail, shipping and money-order operations.</p></div>
+    <div class="panel login-panel"><p class="eyebrow">STAFF ACCESS</p><h2>Sign in to ApexPost</h2><p class="muted">Use your provisioned staff account.</p>
+        <form asp-action="Login" method="post">
+            <input asp-for="ReturnUrl" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+            <label asp-for="Email">Work email</label><input asp-for="Email" autocomplete="username" placeholder="name@apexpost.local" /><span asp-validation-for="Email" class="validation"></span>
+            <label asp-for="Password">Password</label><input asp-for="Password" autocomplete="current-password" /><span asp-validation-for="Password" class="validation"></span>
+            <button class="button button-primary full" type="submit">Sign in securely</button>
+        </form>
+        <p class="fine-print">Demo staff accounts are seeded locally. Configure role passwords through .NET user-secrets before first run.</p>
+    </div>
+</section>

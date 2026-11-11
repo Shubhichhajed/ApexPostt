@@ -1,0 +1,32 @@
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# .NET build outputs
+**/bin/
+**/obj/
+
+# Test outputs
+TestResults/
+*.trx
+
+# IDE and OS
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env
+.env.*
+secrets.json
+
+# Local coursework runtime data and generated artifacts
+**/App_Data/
+**/shipment-metadata.json
+**/*.sqlite
+**/*.cblite2/
+
+# Courier client local data (encrypted token, key ring)
+**/token.bin

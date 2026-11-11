@@ -1,0 +1,4 @@
+@model IReadOnlyList<MoneyOrderReadDto>
+@{ ViewData["Title"] = "Money orders"; }
+<div class="page-heading"><div><p class="eyebrow">FINANCIAL SERVICES</p><h1>Money orders</h1><p class="muted">Issued money orders visible within your role and branch scope.</p></div><a class="button button-primary" asp-action="Create">＋ Issue money order</a></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Reference</th><th>Branch</th><th>Sender</th><th>Recipient</th><th class="numeric">Amount</th><th class="numeric">Fee</th><th>Status</th><th>Created</th></tr></thead><tbody>@foreach (var order in Model) { <tr><td><code>@order.Id[..8]</code></td><td>@order.BranchCode</td><td>@order.Sender</td><td>@order.Recipient</td><td class="numeric">₹@order.Amount.ToString("N2")</td><td class="numeric">₹@order.Fee.ToString("N2")</td><td>@order.Status</td><td>@order.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</td></tr> }</tbody></table></div></section>

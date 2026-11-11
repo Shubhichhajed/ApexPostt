@@ -1,0 +1,4 @@
+@model IReadOnlyList<ShippingVolumeRow>
+@{ ViewData["Title"] = "Shipping volume"; }
+<div class="page-heading"><div><p class="eyebrow">POSTAL OPERATIONS</p><h1>Shipping volume</h1><p class="muted">Shipment counts grouped by destination zone and service level.</p></div></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Destination zone</th><th>Service level</th><th class="numeric">Shipments</th></tr></thead><tbody>@foreach (var row in Model) { <tr><td>@row.Zone</td><td>@row.ServiceLevel</td><td class="numeric">@row.Count</td></tr> }</tbody></table></div></section>

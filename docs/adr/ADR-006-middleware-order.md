@@ -1,0 +1,7 @@
+# ADR-006: Middleware Order and Endpoint Metadata
+
+- **Status:** Accepted
+- **Context:** Correlation, exception handling, timing, security headers, maintenance, CORS, rate limiting, IP restrictions and API keys have ordering dependencies. Endpoint metadata is not available until routing has selected an endpoint.
+- **Decision:** Register correlation before exception handling; request timing around downstream processing; security headers before response start; HSTS/HTTPS and maintenance before endpoint execution; routing before CORS and metadata-dependent IP/API-key middleware; rate limiting before controller execution; authentication before authorization. Mark integration endpoints with `RequireApiKeyAttribute` and restricted endpoints with `RestrictedEndpointAttribute`.
+- **Alternatives considered:** Put every concern in controllers; validate API keys before routing using path string checks; trust forwarded IP headers from any source; put authorization before authentication. Rejected because concerns would be duplicated, metadata would be unavailable, client headers could be spoofed, or policies would lack claims.
+- **Consequences:** Pipeline order is documented and covered by HTTP tests. Restricted MVC endpoints receive no-cache headers through `UseWhen`; partner endpoints receive a response marker/diagnostic after key validation. Proxy deployments must configure trusted forwarded-header sources before relying on client IPs.

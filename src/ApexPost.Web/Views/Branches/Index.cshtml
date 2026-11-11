@@ -1,0 +1,4 @@
+@model IReadOnlyList<BranchReadDto>
+@{ ViewData["Title"] = "Branch management"; }
+<div class="page-heading"><div><p class="eyebrow">ADMINISTRATION</p><h1>Branches & counters</h1><p class="muted">Manage branch operating status, opening hours and counter terminals.</p></div><a class="button button-primary" asp-action="Create">＋ Add branch</a></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Branch code</th><th>Name</th><th>Region</th><th>Hours</th><th>Status</th><th>Counters</th><th></th></tr></thead><tbody>@foreach (var item in Model) { <tr><td><code>@item.Code</code></td><td>@item.Name</td><td>@item.Region</td><td>@item.OpeningHours</td><td>@item.Status</td><td>@item.CounterCount</td><td><a asp-action="Edit" asp-route-id="@item.Id">Edit</a></td></tr> }</tbody></table></div></section>

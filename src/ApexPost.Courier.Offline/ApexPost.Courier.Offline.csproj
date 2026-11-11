@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>ApexPost.Courier.Offline</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Couchbase.Lite" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ApexPost.Domain/ApexPost.Domain.csproj" />
+  </ItemGroup>
+</Project>

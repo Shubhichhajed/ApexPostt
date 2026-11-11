@@ -1,0 +1,16 @@
+@model DashboardSummary
+@{ ViewData["Title"] = "Branch dashboard"; }
+<div class="page-heading"><div><p class="eyebrow">OPERATIONS OVERVIEW</p><h1>Good day, @User.Identity?.Name</h1><p class="muted">A live snapshot of counter operations and branch readiness.</p></div><form asp-controller="Transactions" asp-action="Create" method="post"><button class="button button-primary" type="submit">＋ New transaction</button></form></div>
+<div class="metric-grid">
+    <article class="metric-card"><span class="metric-label">Today's sales</span><strong>₹@Model.TodaySales.ToString("N2")</strong><span class="metric-note">Paid transactions today</span></article>
+    <article class="metric-card"><span class="metric-label">Transactions today</span><strong>@Model.TodayTransactions</strong><span class="metric-note">Completed counter sales</span></article>
+    <article class="metric-card"><span class="metric-label">Low-stock alerts</span><strong>@Model.LowStockCount</strong><span class="metric-note">At or below @ViewBag.LowStockThreshold units</span></article>
+    <article class="metric-card"><span class="metric-label">Active staff</span><strong>@Model.ActiveStaffCount</strong><span class="metric-note">Across @Model.BranchCount branches</span></article>
+</div>
+<div class="section-heading"><div><h2>Counter workflows</h2><p class="muted">Start a common task or review operational data.</p></div></div>
+<div class="action-grid">
+    <a class="action-card" asp-controller="Transactions" asp-action="Create"><span class="action-icon">＋</span><span><strong>Start a sale</strong><small>Mix retail products and services in one basket.</small></span><span class="arrow">↗</span></a>
+    <a class="action-card" asp-controller="Products" asp-action="Index"><span class="action-icon">▦</span><span><strong>Catalogue & stock</strong><small>Review products and branch stock availability.</small></span><span class="arrow">↗</span></a>
+    <a class="action-card" asp-controller="Shipping" asp-action="Preview"><span class="action-icon">↗</span><span><strong>Shipping rate preview</strong><small>Calculate a shipment price and validate service limits.</small></span><span class="arrow">↗</span></a>
+    <a class="action-card" asp-controller="MoneyOrders" asp-action="Create"><span class="action-icon">₹</span><span><strong>Issue money order</strong><small>Apply the configurable identity verification threshold.</small></span><span class="arrow">↗</span></a>
+</div>

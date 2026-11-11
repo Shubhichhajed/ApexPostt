@@ -1,0 +1,4 @@
+@model IReadOnlyList<MoneyOrderAuditRow>
+@{ ViewData["Title"] = "Money order audit"; }
+<div class="page-heading"><div><p class="eyebrow">AUDITOR VIEW</p><h1>Money orders & identity checks</h1><p class="muted">Branch-level money-order and identity-verification counts.</p></div></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Branch</th><th class="numeric">Money orders</th><th class="numeric">Successful checks</th><th class="numeric">Failed checks</th></tr></thead><tbody>@foreach (var row in Model) { <tr><td>@row.BranchCode</td><td class="numeric">@row.MoneyOrders</td><td class="numeric">@row.SuccessfulVerifications</td><td class="numeric">@row.FailedVerifications</td></tr> }</tbody></table></div></section>

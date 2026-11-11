@@ -1,0 +1,26 @@
+{
+  "runtime": "Net100",
+  "defaultVariables": null,
+  "documentGenerator": {
+    "fromDocument": {
+      "url": "contracts/v2.json"
+    }
+  },
+  "codeGenerators": {
+    "openApiToCSharpClient": {
+      "className": "ApexPostClient",
+      "namespace": "ApexPost.Client.Generated",
+      "output": "src/ApexPost.Client/obj/nswag-cli/ApexPostClient.cs",
+      "useBaseUrl": false,
+      "generateClientInterfaces": true,
+      "injectHttpClient": true,
+      "disposeHttpClient": false,
+      "jsonLibrary": "SystemTextJson",
+      "generateNullableReferenceTypes": true,
+      "operationGenerationMode": "SingleClientFromOperationId",
+      "exceptionClass": "ApexPostApiException",
+      "dateTimeType": "System.DateTimeOffset",
+      "generateDtoTypes": true
+    }
+  }
+}

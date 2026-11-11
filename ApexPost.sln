@@ -1,0 +1,101 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12224.181 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Domain", "src\ApexPost.Domain\ApexPost.Domain.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0001}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Application", "src\ApexPost.Application\ApexPost.Application.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0002}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Infrastructure", "src\ApexPost.Infrastructure\ApexPost.Infrastructure.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0003}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Web", "src\ApexPost.Web\ApexPost.Web.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0004}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.UnitTests", "tests\ApexPost.UnitTests\ApexPost.UnitTests.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0005}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.IntegrationTests", "tests\ApexPost.IntegrationTests\ApexPost.IntegrationTests.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0006}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{30C818E4-83A2-42F9-85A4-696FE29C883D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Api", "src\ApexPost.Api\ApexPost.Api.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0007}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Courier.Offline", "src\ApexPost.Courier.Offline\ApexPost.Courier.Offline.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0008}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Courier.Offline.Console", "src\ApexPost.Courier.Offline.Console\ApexPost.Courier.Offline.Console.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0009}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Client", "src\ApexPost.Client\ApexPost.Client.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0010}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Client.Consumer", "src\ApexPost.Client.Consumer\ApexPost.Client.Consumer.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0011}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Courier", "src\ApexPost.Courier\ApexPost.Courier.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0012}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApexPost.Courier.Tests", "tests\ApexPost.Courier.Tests\ApexPost.Courier.Tests.csproj", "{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0013}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0012}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0013}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0013}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B7A7C5-5E50-4D43-9C4D-31E52A1A0013}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6852063E-DF89-4DDF-A156-0B80D77B3FB4}
+	EndGlobalSection
+EndGlobal

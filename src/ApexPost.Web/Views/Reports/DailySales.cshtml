@@ -1,0 +1,4 @@
+@model IReadOnlyList<DailySalesRow>
+@{ ViewData["Title"] = "Daily branch sales"; }
+<div class="page-heading"><div><p class="eyebrow">REPORTING</p><h1>Daily branch sales</h1><p class="muted">Retail and service sales are reported separately.</p></div></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Branch</th><th class="numeric">Retail sales</th><th class="numeric">Service sales</th><th class="numeric">Total</th><th class="numeric">Transactions</th></tr></thead><tbody>@foreach (var row in Model) { <tr><td class="primary-cell">@row.BranchCode</td><td class="numeric">₹@row.RetailSales.ToString("N2")</td><td class="numeric">₹@row.ServiceSales.ToString("N2")</td><td class="numeric">₹@row.TotalSales.ToString("N2")</td><td class="numeric">@row.TransactionCount</td></tr> }</tbody></table></div></section>

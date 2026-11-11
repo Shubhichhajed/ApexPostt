@@ -1,0 +1,7 @@
+# ADR-001: Layered Architecture with Pragmatic DDD
+
+- **Status:** Accepted
+- **Context:** Assessment 02 changes the Week 1 resource-allocation domain into branch retail, shipping, money orders, identity verification and mixed counter transactions. The rules protect inventory, branch access and financial workflows. Week 3 adds SQL Server but should not make the domain depend on EF Core.
+- **Decision:** Keep four projects: Domain, Application, Infrastructure and Web. Domain owns entities, value objects and invariants; Application owns use cases and ports; Infrastructure implements persistence/integration adapters; Web is the composition root and presentation boundary. Apply aggregate behavior and domain events only where they protect a real business rule.
+- **Alternatives considered:** A single MVC project with EF entities in controllers; a microservice per business capability; full tactical DDD with factories, event sourcing and CQRS read stores. Rejected because the former mixes concerns, while the latter options add operational and conceptual complexity that the continuous assessment does not need.
+- **Consequences:** Domain tests run without a web host, SQL Server or filesystem. The solution has more projects and explicit mappings, but dependency direction is enforceable through project references. New business logic belongs in Domain/Application, not Program.cs, middleware or controllers.

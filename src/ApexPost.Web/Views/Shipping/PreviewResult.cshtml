@@ -1,0 +1,3 @@
+@model ShippingEstimateViewModel
+@{ ViewData["Title"] = "Shipping estimate"; }
+<section class="panel estimate-panel"><p class="eyebrow">RATE ESTIMATE</p><h1>₹@Model.Price.ToString("N2")</h1><p class="muted">@Model.Kind · @Model.WeightKg kg · @Model.DestinationZone · @Model.ServiceLevel</p><div class="estimate-meta"><span>Dimensions</span><strong>@Model.LengthCm × @Model.WidthCm × @Model.HeightCm cm</strong></div><p class="fine-print">This is a local pricing preview, not a purchased shipping label or a confirmed carrier booking.</p><a class="button button-primary" asp-action="Preview">New estimate</a></section>

@@ -1,0 +1,17 @@
+@model BranchEditViewModel
+@{ ViewData["Title"] = Model.Id is null ? "Add branch" : "Edit branch"; }
+<div class="page-heading"><div><p class="eyebrow">ADMINISTRATION</p><h1>@ViewData["Title"]</h1></div></div>
+<section class="panel form-panel narrow-panel">
+    <form asp-action="@(Model.Id is null ? "Create" : "Edit")" asp-route-id="@Model.Id" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+        <div class="form-grid">
+            <div><label asp-for="Code"></label>@if (Model.Id is not null) { <input asp-for="Code" readonly /> } else { <input asp-for="Code" /> }<span asp-validation-for="Code" class="validation"></span></div>
+            <div><label asp-for="Name"></label><input asp-for="Name"/><span asp-validation-for="Name" class="validation"></span></div>
+            <div><label asp-for="Region"></label><input asp-for="Region"/><span asp-validation-for="Region" class="validation"></span></div>
+            <div><label asp-for="OpeningHours"></label><input asp-for="OpeningHours"/><span asp-validation-for="OpeningHours" class="validation"></span></div>
+            <div><label asp-for="CounterName"></label><input asp-for="CounterName"/><span asp-validation-for="CounterName" class="validation"></span></div>
+        </div>
+        <button class="button button-primary" type="submit">Save branch</button>
+        <a class="button button-quiet" asp-action="Index">Cancel</a>
+    </form>
+</section>

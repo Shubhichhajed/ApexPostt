@@ -1,0 +1,6 @@
+@model IReadOnlyList<TransactionListReadDto>
+@{ ViewData["Title"] = "Transactions"; }
+<div class="page-heading"><div><p class="eyebrow">COUNTER OPERATIONS</p><h1>Transactions</h1><p class="muted">Recent counter activity for your permitted branch scope.</p></div><form asp-action="Create" method="post"><button class="button button-primary" type="submit">＋ New transaction</button></form></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Reference</th><th>Branch</th><th>Created</th><th>Lines</th><th class="numeric">Total</th><th>Status</th><th></th></tr></thead><tbody>
+@foreach (var item in Model) { <tr><td><code>@item.Id[..8]</code></td><td>@item.BranchCode</td><td>@item.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</td><td>@item.LineCount</td><td class="numeric">₹@item.Total.ToString("N2")</td><td><span class="status status-@item.Status.ToString().ToLowerInvariant()">@item.Status</span></td><td><a asp-action="Details" asp-route-id="@item.Id">Open →</a></td></tr> }
+</tbody></table></div></section>

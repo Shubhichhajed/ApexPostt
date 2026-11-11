@@ -1,0 +1,4 @@
+@model IReadOnlyList<LowStockRow>
+@{ ViewData["Title"] = "Low stock"; }
+<div class="page-heading"><div><p class="eyebrow">INVENTORY CONTROL</p><h1>Low-stock report</h1><p class="muted">Stock threshold: @ViewBag.LowStockThreshold units or fewer per branch.</p></div></div>
+<section class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Branch</th><th>SKU</th><th>Product</th><th class="numeric">Quantity</th></tr></thead><tbody>@foreach (var row in Model) { <tr><td>@row.BranchCode</td><td><code>@row.Sku</code></td><td>@row.ProductName</td><td class="numeric"><span class="stock stock-low">@row.Quantity</span></td></tr> }</tbody></table></div></section>

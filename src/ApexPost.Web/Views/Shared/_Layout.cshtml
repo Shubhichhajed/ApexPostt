@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - ApexPost Counter Platform</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" asp-controller="Dashboard" asp-action="Index"><span class="brand-mark">A</span><span>ApexPost <small>Counter Platform</small></span></a>
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <nav aria-label="Main navigation">
+            <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+            <a asp-controller="Products" asp-action="Index">Catalogue & Stock</a>
+            <a asp-controller="Transactions" asp-action="Index">Transactions</a>
+            <a asp-controller="Shipping" asp-action="Preview">Shipping</a>
+            <a asp-controller="MoneyOrders" asp-action="Index">Money orders</a>
+            @if (User.IsInRole("BranchManager") || User.IsInRole("Auditor") || User.IsInRole("Administrator")) { <a asp-controller="Reports" asp-action="DailySales">Reports</a> }
+            @if (User.IsInRole("BranchManager") || User.IsInRole("Administrator")) { <a asp-controller="Inventory" asp-action="Adjust">Stock adjustment</a> }
+            @if (User.IsInRole("Administrator")) { <a asp-controller="Branches" asp-action="Index">Branches</a><a asp-controller="Staff" asp-action="Index">Staff</a> }
+        </nav>
+        <div class="user-area"><span>@User.Identity.Name <small>@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value · @User.FindFirst("BranchCode")?.Value</small></span><form asp-controller="Account" asp-action="Logout" method="post"><button class="button button-quiet" type="submit">Sign out</button></form></div>
+    }
+</header>
+<main class="page-shell">
+    @if (TempData["Notice"] is string notice) { <div class="notice" role="status">@notice</div> }
+    @RenderBody()
+</main>
+<footer class="footer"><span>ApexPost Logistics</span><span>Internal retail counter platform · Demonstration build</span></footer>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

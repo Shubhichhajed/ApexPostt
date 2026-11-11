@@ -1,0 +1,365 @@
+# ApexPost.Api requests (Visual Studio / VS Code REST Client).
+# Run the two token requests first; later requests reuse the tokens through the named responses.
+# The partner key must match `Partner:ApiKey` in your user-secrets.
+
+@baseUrl = https://localhost:7001
+@partnerKey = paste-your-development-partner-key
+@scanA = scan::6b1f3c2e-8a4d-4f7b-9c1e-2d3f4a5b6c7d
+@scanB = scan::7c2a4d3f-9b5e-4a8c-8d2f-3e4a5b6c7d8e
+
+### DEV: Admin token (Development only)
+# @name adminLogin
+POST {{baseUrl}}/dev/token
+Content-Type: application/json
+
+{"role":"Admin","subject":"http-file-admin"}
+
+### DEV: Courier token for courier-demo-01 (Development only)
+# @name courierLogin
+POST {{baseUrl}}/dev/token
+Content-Type: application/json
+
+{"role":"Courier","courierId":"courier-demo-01"}
+
+### DEV: short-lived Courier token (1 minute) - wait a minute, then use it to see the expired-token 401
+# @name shortLogin
+POST {{baseUrl}}/dev/token
+Content-Type: application/json
+
+{"role":"Courier","courierId":"courier-demo-01","lifetimeMinutes":1}
+
+@adminToken = {{adminLogin.response.body.$.access_token}}
+@courierToken = {{courierLogin.response.body.$.access_token}}
+
+### Health (no auth)
+GET {{baseUrl}}/health
+
+###############################################################################
+# V1 (deprecated: see api-deprecated-versions / Sunset headers)
+###############################################################################
+
+### v1 200: list shipments (paged + filtered)
+GET {{baseUrl}}/api/v1/shipments?page=1&pageSize=20&status=Created&city=Springfield
+Authorization: Bearer {{adminToken}}
+
+### v1 400: pageSize above 50
+GET {{baseUrl}}/api/v1/shipments?page=1&pageSize=100
+Authorization: Bearer {{adminToken}}
+
+### v1 201 + Location: create shipment (Admin)
+POST {{baseUrl}}/api/v1/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-10000001","weight":2.5,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"100 Example Avenue","recipientCity":"Springfield","notes":"Fictional v1 test"}
+
+### v1 409: duplicate tracking number
+POST {{baseUrl}}/api/v1/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-10000001","weight":2.5,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"100 Example Avenue","recipientCity":"Springfield"}
+
+### v1 400: ValidationProblemDetails (bad tracking number, weight, phone, missing city)
+POST {{baseUrl}}/api/v1/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-12","weight":90,"recipientName":"","recipientPhone":"call me","recipientAddress":"1 St"}
+
+### v1 415: wrong content type
+POST {{baseUrl}}/api/v1/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: text/plain
+
+trackingNumber=APX-10000001
+
+### v1 200: get one shipment
+GET {{baseUrl}}/api/v1/shipments/APX-10000001
+Authorization: Bearer {{courierToken}}
+
+### v1 404: unknown tracking number
+GET {{baseUrl}}/api/v1/shipments/APX-00000000
+Authorization: Bearer {{courierToken}}
+
+### v1 200: replace editable details (Admin, status Created)
+PUT {{baseUrl}}/api/v1/shipments/APX-10000001
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"weight":3.1,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"200 Example Avenue","recipientCity":"Springfield","notes":"Updated"}
+
+### v1 404: replace unknown shipment
+PUT {{baseUrl}}/api/v1/shipments/APX-00000000
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"weight":3.1,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"200 Example Avenue","recipientCity":"Springfield"}
+
+### v1 200: upload two offline scans (Courier, own courierId)
+POST {{baseUrl}}/api/v1/shipments/APX-10000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[
+  {"scanId":"{{scanA}}","scanType":"Pickup","courierId":"courier-demo-01","location":"Springfield Depot","scannedAtUtc":"2026-11-10T08:00:00Z"},
+  {"scanId":"scan::1a2b3c4d-0000-4000-8000-000000000001","scanType":"InTransit","courierId":"courier-demo-01","location":"Springfield Route 4","scannedAtUtc":"2026-11-10T08:30:00Z"}
+]}
+
+### v1 200: same scans again -> duplicatesSkipped = 2 (idempotent)
+POST {{baseUrl}}/api/v1/shipments/APX-10000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[
+  {"scanId":"{{scanA}}","scanType":"Pickup","courierId":"courier-demo-01","location":"Springfield Depot","scannedAtUtc":"2026-11-10T08:00:00Z"},
+  {"scanId":"scan::1a2b3c4d-0000-4000-8000-000000000001","scanType":"InTransit","courierId":"courier-demo-01","location":"Springfield Route 4","scannedAtUtc":"2026-11-10T08:30:00Z"}
+]}
+
+### v1 400: custom rules - future scan time and Delivered without signature
+POST {{baseUrl}}/api/v1/shipments/APX-10000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[{"scanId":"scan::3b2b3c4d-0000-4000-8000-000000000003","scanType":"Delivered","courierId":"courier-demo-01","location":"Front door","scannedAtUtc":"2099-01-01T00:00:00Z"}]}
+
+### v1 403: courierId does not match the token's courierId claim
+POST {{baseUrl}}/api/v1/shipments/APX-10000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[{"scanId":"scan::5c2b3c4d-0000-4000-8000-000000000004","scanType":"Pickup","courierId":"someone-else","location":"Depot","scannedAtUtc":"2026-11-10T08:00:00Z"}]}
+
+### v1 200: scan history
+GET {{baseUrl}}/api/v1/shipments/APX-10000001/scans
+Authorization: Bearer {{courierToken}}
+
+### v1 404: scan history of unknown shipment
+GET {{baseUrl}}/api/v1/shipments/APX-00000000/scans
+Authorization: Bearer {{courierToken}}
+
+### v1 200: status Created -> PickedUp (Courier)
+PATCH {{baseUrl}}/api/v1/shipments/APX-10000001/status
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"status":"PickedUp"}
+
+### v1 409: invalid transition PickedUp -> Delivered
+PATCH {{baseUrl}}/api/v1/shipments/APX-10000001/status
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"status":"Delivered"}
+
+### v1 409: delete is only allowed while Created
+DELETE {{baseUrl}}/api/v1/shipments/APX-10000001
+Authorization: Bearer {{adminToken}}
+
+### v1 201: create a second shipment to delete
+POST {{baseUrl}}/api/v1/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-10000002","weight":1.2,"recipientName":"Sam Lee","recipientPhone":"+44 161 496 0000","recipientAddress":"5 Sample Road","recipientCity":"Rivertown"}
+
+### v1 204: delete (Admin, status Created)
+DELETE {{baseUrl}}/api/v1/shipments/APX-10000002
+Authorization: Bearer {{adminToken}}
+
+### v1 404: delete unknown shipment
+DELETE {{baseUrl}}/api/v1/shipments/APX-00000000
+Authorization: Bearer {{adminToken}}
+
+###############################################################################
+# V2
+###############################################################################
+
+### v2 200: list shipments (paged + filtered)
+GET {{baseUrl}}/api/v2/shipments?page=1&pageSize=20&status=Created&city=Springfield
+Authorization: Bearer {{adminToken}}
+
+### v2 400: pageSize above 50
+GET {{baseUrl}}/api/v2/shipments?page=1&pageSize=100
+Authorization: Bearer {{adminToken}}
+
+### v2 201 + Location: create shipment (Admin)
+POST {{baseUrl}}/api/v2/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-20000001","weight":2.5,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"100 Example Avenue","recipientCity":"Springfield","notes":"Fictional v2 test"}
+
+### v2 409: duplicate tracking number
+POST {{baseUrl}}/api/v2/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-20000001","weight":2.5,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"100 Example Avenue","recipientCity":"Springfield"}
+
+### v2 400: ValidationProblemDetails (bad tracking number, weight, phone, missing city)
+POST {{baseUrl}}/api/v2/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-12","weight":90,"recipientName":"","recipientPhone":"call me","recipientAddress":"1 St"}
+
+### v2 415: wrong content type
+POST {{baseUrl}}/api/v2/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: text/plain
+
+trackingNumber=APX-20000001
+
+### v2 200: get one shipment
+GET {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer {{courierToken}}
+
+### v2 404: unknown tracking number
+GET {{baseUrl}}/api/v2/shipments/APX-00000000
+Authorization: Bearer {{courierToken}}
+
+### v2 200: replace editable details (Admin, status Created)
+PUT {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"weight":3.1,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"200 Example Avenue","recipientCity":"Springfield","notes":"Updated"}
+
+### v2 404: replace unknown shipment
+PUT {{baseUrl}}/api/v2/shipments/APX-00000000
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"weight":3.1,"recipientName":"Alex Morgan","recipientPhone":"+44 20 7946 0958","recipientAddress":"200 Example Avenue","recipientCity":"Springfield"}
+
+### v2 200: upload two offline scans (Courier, own courierId)
+POST {{baseUrl}}/api/v2/shipments/APX-20000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[
+  {"scanId":"{{scanB}}","scanType":"Pickup","courierId":"courier-demo-01","location":"Springfield Depot","scannedAtUtc":"2026-11-10T08:00:00Z"},
+  {"scanId":"scan::2a2b3c4d-0000-4000-8000-000000000002","scanType":"InTransit","courierId":"courier-demo-01","location":"Springfield Route 4","scannedAtUtc":"2026-11-10T08:30:00Z"}
+]}
+
+### v2 200: same scans again -> duplicatesSkipped = 2 (idempotent)
+POST {{baseUrl}}/api/v2/shipments/APX-20000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[
+  {"scanId":"{{scanB}}","scanType":"Pickup","courierId":"courier-demo-01","location":"Springfield Depot","scannedAtUtc":"2026-11-10T08:00:00Z"},
+  {"scanId":"scan::2a2b3c4d-0000-4000-8000-000000000002","scanType":"InTransit","courierId":"courier-demo-01","location":"Springfield Route 4","scannedAtUtc":"2026-11-10T08:30:00Z"}
+]}
+
+### v2 400: custom rules - future scan time and Delivered without signature
+POST {{baseUrl}}/api/v2/shipments/APX-20000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[{"scanId":"scan::4b2b3c4d-0000-4000-8000-000000000003","scanType":"Delivered","courierId":"courier-demo-01","location":"Front door","scannedAtUtc":"2099-01-01T00:00:00Z"}]}
+
+### v2 403: courierId does not match the token's courierId claim
+POST {{baseUrl}}/api/v2/shipments/APX-20000001/scans
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"scans":[{"scanId":"scan::6c2b3c4d-0000-4000-8000-000000000004","scanType":"Pickup","courierId":"someone-else","location":"Depot","scannedAtUtc":"2026-11-10T08:00:00Z"}]}
+
+### v2 200: scan history
+GET {{baseUrl}}/api/v2/shipments/APX-20000001/scans
+Authorization: Bearer {{courierToken}}
+
+### v2 404: scan history of unknown shipment
+GET {{baseUrl}}/api/v2/shipments/APX-00000000/scans
+Authorization: Bearer {{courierToken}}
+
+### v2 200: status Created -> PickedUp (Courier)
+PATCH {{baseUrl}}/api/v2/shipments/APX-20000001/status
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"status":"PickedUp"}
+
+### v2 409: invalid transition PickedUp -> Delivered
+PATCH {{baseUrl}}/api/v2/shipments/APX-20000001/status
+Authorization: Bearer {{courierToken}}
+Content-Type: application/json
+
+{"status":"Delivered"}
+
+### v2 409: delete is only allowed while Created
+DELETE {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer {{adminToken}}
+
+### v2 201: create a second shipment to delete
+POST {{baseUrl}}/api/v2/shipments
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"trackingNumber":"APX-20000002","weight":1.2,"recipientName":"Sam Lee","recipientPhone":"+44 161 496 0000","recipientAddress":"5 Sample Road","recipientCity":"Rivertown"}
+
+### v2 204: delete (Admin, status Created)
+DELETE {{baseUrl}}/api/v2/shipments/APX-20000002
+Authorization: Bearer {{adminToken}}
+
+### v2 404: delete unknown shipment
+DELETE {{baseUrl}}/api/v2/shipments/APX-00000000
+Authorization: Bearer {{adminToken}}
+
+###############################################################################
+# PART D - security
+###############################################################################
+
+### 401: no token
+GET {{baseUrl}}/api/v2/shipments/APX-20000001
+
+### 401: malformed / tampered token
+GET {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer not.a.valid-token
+
+### 401: expired token (run "short-lived Courier token" above, wait over a minute, then run this)
+GET {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer {{shortLogin.response.body.$.access_token}}
+
+### 200: valid token, any role may read
+GET {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer {{courierToken}}
+
+### 403: Courier may not delete (Admin only)
+DELETE {{baseUrl}}/api/v2/shipments/APX-20000001
+Authorization: Bearer {{courierToken}}
+
+### 403: Admin may not upload scans (Courier only)
+POST {{baseUrl}}/api/v2/shipments/APX-20000001/scans
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"scans":[{"scanId":"scan::9d2b3c4d-0000-4000-8000-000000000009","scanType":"Pickup","courierId":"courier-demo-01","location":"Depot","scannedAtUtc":"2026-11-10T08:00:00Z"}]}
+
+### 403: Admin may not PATCH status (Courier only)
+PATCH {{baseUrl}}/api/v2/shipments/APX-20000001/status
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{"status":"InTransit"}
+
+### Partner 200: valid X-Api-Key
+GET {{baseUrl}}/api/v2/partner/shipments/APX-20000001
+X-Api-Key: {{partnerKey}}
+
+### Partner 401: missing X-Api-Key
+GET {{baseUrl}}/api/v2/partner/shipments/APX-20000001
+
+### Partner 401: invalid X-Api-Key
+GET {{baseUrl}}/api/v2/partner/shipments/APX-20000001
+X-Api-Key: wrong-key
+
+### Partner 404: valid key, unknown shipment
+GET {{baseUrl}}/api/v2/partner/shipments/APX-00000000
+X-Api-Key: {{partnerKey}}
+
+### 404 ProblemDetails: tracking number in the wrong format does not match any route
+GET {{baseUrl}}/api/v2/shipments/ABC-1
+Authorization: Bearer {{courierToken}}
